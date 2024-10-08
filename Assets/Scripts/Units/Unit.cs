@@ -193,13 +193,12 @@ public class Unit : MonoBehaviour
 
 	public IEnumerator moveOverSeconds(GameObject objectToMove, Node endNode)
 	{
-		movementQueue.Enqueue(1);
-		remMove = moveSpeed;
+		movementQueue.Enqueue(1);		
 
 		//remove first thing on path because, its the tile we are standing on
 
 		currentPath.RemoveAt(0);
-		while (currentPath.Count != 0 && remMove > 0)
+		while (currentPath.Count != 0)
 		{
             remMove = remMove - (int)map.CostToEnterTile((int)map.selectedUnit.transform.position.x, (int)map.selectedUnit.transform.position.y, map.selectedUnit.GetComponent<Unit>().currentPath[0].x, map.selectedUnit.GetComponent<Unit>().currentPath[0].y);
 
@@ -212,30 +211,7 @@ public class Unit : MonoBehaviour
 			yield return new WaitForEndOfFrame();
 		}
 		visualMovementSpeed = .3f;
-		transform.position = map.TileCoordToWorldCoord(endNode.x, endNode.y);
-
-        if (map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().currentPath[0].x, map.selectedUnit.GetComponent<Unit>().currentPath[0].y].GetComponent<ClickableTile>().structureOnTile == false
-                && map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().currentPath[0].x, map.selectedUnit.GetComponent<Unit>().currentPath[0].y].GetComponent<ClickableTile>().unitOnTile == false)
-        {
-            Debug.Log("Pene1");
-            map.selectedUnit.transform.position = map.TileCoordToWorldCoord(map.selectedUnit.GetComponent<Unit>().currentPath[0].x, map.selectedUnit.GetComponent<Unit>().currentPath[0].y);
-        }
-        else if (map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().currentPath[0].x - 1, map.selectedUnit.GetComponent<Unit>().currentPath[0].y].GetComponent<ClickableTile>().structureOnTile == false
-            && map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().currentPath[0].x - 1, map.selectedUnit.GetComponent<Unit>().currentPath[0].y].GetComponent<ClickableTile>().unitOnTile == false)
-        {
-            Debug.Log("pene2");
-            map.selectedUnit.transform.position = map.TileCoordToWorldCoord(map.selectedUnit.GetComponent<Unit>().currentPath[0].x - 1, map.selectedUnit.GetComponent<Unit>().currentPath[0].y);
-        }
-        else if (map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().currentPath[0].x - 2, map.selectedUnit.GetComponent<Unit>().currentPath[0].y].GetComponent<ClickableTile>().structureOnTile == false
-            && map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().currentPath[0].x - 2, map.selectedUnit.GetComponent<Unit>().currentPath[0].y].GetComponent<ClickableTile>().unitOnTile == false)
-        {
-            Debug.Log("pene3");
-            map.selectedUnit.transform.position = map.TileCoordToWorldCoord(map.selectedUnit.GetComponent<Unit>().currentPath[0].x - 2, map.selectedUnit.GetComponent<Unit>().currentPath[0].y);
-        }
-        else
-        {
-            map.selectedUnit.transform.position = map.TileCoordToWorldCoord(map.selectedUnit.GetComponent<Unit>().currentPath[0].x + 1, map.selectedUnit.GetComponent<Unit>().currentPath[0].y);
-        }
+		transform.position = map.TileCoordToWorldCoord(endNode.x, endNode.y);        
 
         map.tilesOnMap[unitPreviousX, unitPreviousY].GetComponent<ClickableTile>().unitOnTile = null;
 		map.tilesOnMap[tileX, tileY].GetComponent<ClickableTile>().unitOnTile = this.gameObject;

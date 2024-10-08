@@ -439,24 +439,24 @@ public class IA : MonoBehaviour
             if ((unitsToAttack[0].transform.position.x - map.selectedUnit.transform.position.x < map.selectedUnit.transform.position.x - unitsToAttack[0].transform.position.x)
                     && (unitsToAttack[0].transform.position.x - map.selectedUnit.transform.position.x < map.selectedUnit.transform.position.y - unitsToAttack[0].transform.position.y))
             {
-                GeneratePathTo((int)unitsToAttack[0].transform.position.x + 1, (int)unitsToAttack[0].transform.position.y);
+                GeneratePathTo((int)unitsToAttack[0].transform.position.x + 1, (int)unitsToAttack[0].transform.position.y);                
                 return true;
             }
             else if ((unitsToAttack[0].transform.position.x - map.selectedUnit.transform.position.x > map.selectedUnit.transform.position.x - unitsToAttack[0].transform.position.x)
                 && (unitsToAttack[0].transform.position.x - map.selectedUnit.transform.position.x < map.selectedUnit.transform.position.y - unitsToAttack[0].transform.position.y))
             {
-                GeneratePathTo((int)unitsToAttack[0].transform.position.x - 1, (int)unitsToAttack[0].transform.position.y);
+                GeneratePathTo((int)unitsToAttack[0].transform.position.x - 1, (int)unitsToAttack[0].transform.position.y);                
                 return true;
             }
             else if ((unitsToAttack[0].transform.position.y - map.selectedUnit.transform.position.y < map.selectedUnit.transform.position.y - unitsToAttack[0].transform.position.y)
                 && (unitsToAttack[0].transform.position.x - map.selectedUnit.transform.position.x > map.selectedUnit.transform.position.y - unitsToAttack[0].transform.position.y))
             {
-                GeneratePathTo((int)unitsToAttack[0].transform.position.x, (int)unitsToAttack[0].transform.position.y + 1); 
+                GeneratePathTo((int)unitsToAttack[0].transform.position.x, (int)unitsToAttack[0].transform.position.y + 1);                
                 return true;
             }
             else
             {
-                GeneratePathTo((int)unitsToAttack[0].transform.position.x, (int)unitsToAttack[0].transform.position.y - 1);
+                GeneratePathTo((int)unitsToAttack[0].transform.position.x, (int)unitsToAttack[0].transform.position.y - 1);                
                 return true;
             }            
         }
@@ -468,13 +468,13 @@ public class IA : MonoBehaviour
             if (((unitsToAttack[0].transform.position.x - map.selectedUnit.transform.position.x < map.selectedUnit.transform.position.x - unitsToAttack[0].transform.position.x)
                     && (unitsToAttack[0].transform.position.x - map.selectedUnit.transform.position.x < map.selectedUnit.transform.position.y - unitsToAttack[0].transform.position.y)))
             {
-                GeneratePathTo((int)unitToAttack.transform.position.x + 1, (int)unitsToAttack[0].transform.position.y);
+                GeneratePathTo((int)unitToAttack.transform.position.x + 1, (int)unitsToAttack[0].transform.position.y);                
                 return true;
             }
             else if ((unitsToAttack[0].transform.position.x - map.selectedUnit.transform.position.x > map.selectedUnit.transform.position.x - unitsToAttack[0].transform.position.x)
                 && (unitsToAttack[0].transform.position.x - map.selectedUnit.transform.position.x < map.selectedUnit.transform.position.y - unitsToAttack[0].transform.position.y))
             {
-                GeneratePathTo((int)unitToAttack.transform.position.x - 1, (int)unitsToAttack[0].transform.position.y);
+                GeneratePathTo((int)unitToAttack.transform.position.x - 1, (int)unitsToAttack[0].transform.position.y);                
                 return true;
             }
             else if ((unitsToAttack[0].transform.position.y - map.selectedUnit.transform.position.y < map.selectedUnit.transform.position.y - unitsToAttack[0].transform.position.y)
@@ -581,6 +581,49 @@ public class IA : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    void GeneratePathToValidation()
+    {
+        int c = 0;
+        while (remMove > 0 && c < 100)
+        {
+            if (map.selectedUnit.GetComponent<Unit>().currentPath == null)
+                return;
+
+            remMove = remMove - (int)map.CostToEnterTile((int)map.selectedUnit.transform.position.x, (int)map.selectedUnit.transform.position.y, map.selectedUnit.GetComponent<Unit>().currentPath[0].x, map.selectedUnit.GetComponent<Unit>().currentPath[0].y);
+
+            if (map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().currentPath[0].x, map.selectedUnit.GetComponent<Unit>().currentPath[0].y].GetComponent<ClickableTile>().structureOnTile == false
+                && map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().currentPath[0].x, map.selectedUnit.GetComponent<Unit>().currentPath[0].y].GetComponent<ClickableTile>().unitOnTile == false)
+            {
+                Debug.Log("Pene1");
+                GeneratePathTo(map.selectedUnit.GetComponent<Unit>().currentPath[0].x, map.selectedUnit.GetComponent<Unit>().currentPath[0].y);
+            }
+            else if (map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().currentPath[0].x - 1, map.selectedUnit.GetComponent<Unit>().currentPath[0].y].GetComponent<ClickableTile>().structureOnTile == false
+                && map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().currentPath[0].x - 1, map.selectedUnit.GetComponent<Unit>().currentPath[0].y].GetComponent<ClickableTile>().unitOnTile == false)
+            {
+                Debug.Log("pene2");
+                GeneratePathTo(map.selectedUnit.GetComponent<Unit>().currentPath[0].x - 1, map.selectedUnit.GetComponent<Unit>().currentPath[0].y);
+            }
+            else if (map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().currentPath[0].x - 2, map.selectedUnit.GetComponent<Unit>().currentPath[0].y].GetComponent<ClickableTile>().structureOnTile == false
+                && map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().currentPath[0].x - 2, map.selectedUnit.GetComponent<Unit>().currentPath[0].y].GetComponent<ClickableTile>().unitOnTile == false)
+            {
+                Debug.Log("pene3");
+                GeneratePathTo(map.selectedUnit.GetComponent<Unit>().currentPath[0].x - 2, map.selectedUnit.GetComponent<Unit>().currentPath[0].y);
+            }
+            else
+            {
+                GeneratePathTo(map.selectedUnit.GetComponent<Unit>().currentPath[0].x + 1, map.selectedUnit.GetComponent<Unit>().currentPath[0].y);
+            }
+
+            map.selectedUnit.GetComponent<Unit>().currentPath.RemoveAt(0);
+
+            if (map.selectedUnit.GetComponent<Unit>().currentPath.Count <= 0)
+            {
+                map.selectedUnit.GetComponent<Unit>().currentPath = null;
+            }
+            c++;
+        }
     }
 
     void GeneratePathTo(int x, int y)
@@ -756,7 +799,7 @@ public class IA : MonoBehaviour
             }
         }
     }
-
+/*
     public IEnumerator moveOverSeconds(GameObject objectToMove, Node endNode)
     {
         map.selectedUnit.GetComponent<Unit>().movementQueue.Enqueue(1);
@@ -787,45 +830,7 @@ public class IA : MonoBehaviour
         map.selectedUnit.GetComponent<Unit>().movementQueue.Dequeue();
     }
 
-    /*
-    public IEnumerator moveOverSeconds(GameObject objectToMove, Node endNode)
-    {
-        map.selectedUnit.GetComponent<Unit>().movementQueue.Enqueue(1);
-
-        //remove first thing on path because, its the tile we are standing on
-        map.selectedUnit.GetComponent<Unit>().currentPath.RemoveAt(0);
-
-        MoveNextTile();
-
-        map.selectedUnit.GetComponent<Unit>().visualMovementSpeed = .3f;
-
-        //Remove last movement
-        map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().unitPreviousX, map.selectedUnit.GetComponent<Unit>().unitPreviousY].GetComponent<ClickableTile>().unitOnTile = null;
-        map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().tileX, map.selectedUnit.GetComponent<Unit>().tileY].GetComponent<ClickableTile>().unitOnTile = map.selectedUnit;
-
-        map.selectedUnit.GetComponent<Unit>().tileX = endNode.x;
-        map.selectedUnit.GetComponent<Unit>().tileY = endNode.y;
-        map.selectedUnit.GetComponent<Unit>().tileBeingOccupied.GetComponent<ClickableTile>().unitOnTile = null;
-        map.selectedUnit.GetComponent<Unit>().tileBeingOccupied = map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().tileX, map.selectedUnit.GetComponent<Unit>().tileY];
-        map.selectedUnit.GetComponent<Unit>().movementQueue.Dequeue();
-        yield return new WaitForEndOfFrame();
-
-        //otron
-        while (currentPath.Count != 0)
-        {
-            Vector3 endPos = map.TileCoordToWorldCoord(currentPath[0].x, currentPath[0].y);
-            objectToMove.transform.position = Vector3.Lerp(transform.position, endPos, visualMovementSpeed);
-            if ((transform.position - endPos).sqrMagnitude < 0.001)
-            {
-                currentPath.RemoveAt(0);
-            }
-            yield return new WaitForEndOfFrame();
-        }
-        visualMovementSpeed = .3f;
-        transform.position = map.TileCoordToWorldCoord(endNode.x, endNode.y);
-    }
-
-    
+    */
     public IEnumerator moveOverSeconds(GameObject objectToMove, Node endNode)
     {
         int remMove = map.selectedUnit.GetComponent<Unit>().moveSpeed;
@@ -848,8 +853,7 @@ public class IA : MonoBehaviour
         map.selectedUnit.GetComponent<Unit>().tileBeingOccupied = map.tilesOnMap[map.selectedUnit.GetComponent<Unit>().tileX, map.selectedUnit.GetComponent<Unit>().tileY];
         map.selectedUnit.GetComponent<Unit>().movementQueue.Dequeue();
         yield return new WaitForEndOfFrame();
-    }
-    */
+    }    
     public float CostToEnterTile(int sourceX, int sourceY, int targetX, int targetY)
     {
         if (targetX < 0 || targetY < 0)
